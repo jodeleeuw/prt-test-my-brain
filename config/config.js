@@ -15,6 +15,28 @@ var CONFIG = {
   REWARD_AMOUNT: 50 // cents
 }
 
+CONFIG.IMAGE_LIST = [
+  'img/7C_10S_yellow3.jpg',
+  'img/7C_10S_yellow4.jpg',
+  'img/7C_10S_yellow5.jpg',
+  'img/7C_10S_yellow6.jpg',
+  'img/7C_10S_yellow7.jpg',
+  'img/7C_10S_yellow8.jpg',
+  'img/7C_10S_yellow9.jpg',
+  'img/7C_10S_yellow10.jpg',
+  'img/7S_10C_yellow1.jpg',
+  'img/7S_10C_yellow2.jpg',
+  'img/7S_10C_yellow3.jpg',
+  'img/7S_10C_yellow4.jpg',
+  'img/7S_10C_yellow5.jpg',
+  'img/7S_10C_yellow6.jpg',
+  'img/7S_10C_yellow7.jpg',
+  'img/7S_10C_yellow8.jpg',
+  'img/7S_10C_yellow9.jpg',
+  'img/7S_10C_yellow10.jpg',
+  'img/reward.gif'
+]
+
 CONFIG.TRIAL_INFO = [
   { "block": 1, "trial": 1, "stimulus": "img/7S_10C_yellow6.jpg", "rewarded": 0 },
   { "block": 1, "trial": 2, "stimulus": "img/7C_10S_yellow5.jpg", "rewarded": 1 },
