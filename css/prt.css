@@ -1,0 +1,12 @@
+html, body {
+  background-color: black;
+  color: white;
+}
+
+.fixation {
+  font-size: 72px;
+}
+
+.feedback {
+  font-size: 24px;
+}
