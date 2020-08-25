@@ -4,6 +4,8 @@
     <script src="jspsych/jspsych.js"></script>
     <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych/plugins/jspsych-audio-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-call-function.js"></script>
+    <script type="text/javascript" src="TestMyBrain.12.18.min.js"></script>
     <link rel="stylesheet" href="jspsych/css/jspsych.css">
     <link rel="stylesheet" href="css/prt.css">
     <script src="config/config.js"></script>
@@ -108,7 +110,10 @@
       type: 'html-keyboard-response',
       stimulus: '<p class="fixation">+</p>',
       choices: jsPsych.NO_KEYS,
-      trial_duration: CONFIG.FIXATION_DURATION
+      trial_duration: CONFIG.FIXATION_DURATION,
+      data: {
+        task: 'fixation'
+      }
     }
 
     var target_display = {
@@ -123,7 +128,8 @@
         block: jsPsych.timelineVariable('block'),
         trial: jsPsych.timelineVariable('trial'),
         rewarded: jsPsych.timelineVariable('rewarded'),
-        image: jsPsych.timelineVariable('stimulus')
+        image: jsPsych.timelineVariable('stimulus'),
+        task: 'respond'
       },
       on_finish: function(data){
         if(data.image.includes('7C_10S')){
@@ -155,7 +161,10 @@
         }
       },
       trial_duration: CONFIG.FEEDBACK_DURATION,
-      choices: jsPsych.NO_KEYS
+      choices: jsPsych.NO_KEYS,
+      data: {
+        task: 'accuracy-feedback'
+      }
     }
 
     var feedback = {
@@ -164,7 +173,10 @@
         stimulus: 'mp3/reward-sound.mp3',
         prompt: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
         trial_duration: CONFIG.FEEDBACK_DURATION,
-        choices: jsPsych.NO_KEYS
+        choices: jsPsych.NO_KEYS,
+        data: {
+          task: 'reward-feedback'
+        }
       }],
       conditional_function: function(){
         var last_shape = jsPsych.data.get().last(1).values()[0].correct_shape;
@@ -232,7 +244,34 @@
 
     /* save data */ 
 
+    var save_data = {
+      type: 'call-function',
+      func: function(){
+        
+        var results = jsPsych.data.get().ignore("internal_node_id").ignore("key_press").values();
+        var score = 0;
+        var outcomes = {};
+        //tmbSubmitToServer(results,score,outcomes);
+        
+        //jsPsych.data.get().ignore("internal_node_id").ignore("key_press").localSave('csv', 'sample-social-rl-data.csv')
+      }
+    }
+
     /* end */ 
+
+    var final_screen = {
+      type: 'html-keyboard-response',
+      choices: jsPsych.NO_KEYS,
+      stimulus: function(){
+        var correct_trial_count = jsPsych.data.get().filter({task: 'respond', phase: 'test', correct: true}).count();
+        var total_trial_count = jsPsych.data.get().filter({task: 'respond', phase: 'test'}).count();
+        
+        var total_earned = jsPsych.data.get().filter({task: 'reward-feedback'}).count() * CONFIG.REWARD_AMOUNT / 100;
+
+        return `<p>You have completed the task!</p><p>You responded correctly on ${correct_trial_count} of ${total_trial_count} trials.</p>
+          <p>You earned $${total_earned}!</p>`
+      }
+    }
 
 
     /* initialization */
@@ -242,6 +281,8 @@
     timeline.push(practice_procedure);
     timeline.push(instructions_feedback);
     timeline.push(test_procedure);
+    timeline.push(save_data);
+    timeline.push(final_screen);
 
     jsPsych.init({
       timeline: timeline,
