@@ -189,16 +189,19 @@
             }
             if(last_shape == CONFIG.RIGHT_SHAPE) {
               unrewarded_right_trials++;
-            } 
+            }
+            return false; 
           }
         } else {
-          if(last_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
-            unrewarded_left_trials--;
-            return true;
-          }
-          if(last_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0){
-            unrewarded_right_trials--;
-            return true;
+          if(jsPsych.data.get().last(1).values()[0].correct){
+            if(last_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
+              unrewarded_left_trials--;
+              return true;
+            }
+            if(last_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0){
+              unrewarded_right_trials--;
+              return true;
+            }
           }
           return false;
         }
@@ -277,9 +280,9 @@
     /* initialization */
     var timeline = [];
 
-    timeline.push(instructions_intro);
-    timeline.push(practice_procedure);
-    timeline.push(instructions_feedback);
+    //timeline.push(instructions_intro);
+    //timeline.push(practice_procedure);
+    //timeline.push(instructions_feedback);
     timeline.push(test_procedure);
     timeline.push(save_data);
     timeline.push(final_screen);

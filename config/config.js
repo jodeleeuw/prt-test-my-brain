@@ -1,7 +1,7 @@
 var CONFIG = {
   FIXATION_DURATION: 500, // ms
   STIMULUS_DURATION: 350, // ms
-  TRIAL_DURATION: 5000, // ms
+  TRIAL_DURATION: 2000, // ms
   FEEDBACK_DURATION: 1500, // ms
   LEFT_KEY: 'a', // use lowercase
   RIGHT_KEY: 'l', // use lowercase
