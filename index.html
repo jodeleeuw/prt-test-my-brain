@@ -10,6 +10,10 @@
   </head>
   <body></body>
   <script>
+
+    /* reward setup */
+    var unrewarded_left_trials = 0;
+    var unrewarded_right_trials = 0;
     
     /* instructions */
 
@@ -163,9 +167,27 @@
         choices: jsPsych.NO_KEYS
       }],
       conditional_function: function(){
-        if(jsPsych.timelineVariable('rewarded', true) == 1 && jsPsych.data.get().last(1).values()[0].correct){
-          return true;
+        var last_shape = jsPsych.data.get().last(1).values()[0].correct_shape;
+        if(jsPsych.timelineVariable('rewarded', true) == 1){
+          if(jsPsych.data.get().last(1).values()[0].correct){
+            return true;
+          } else {
+            if(last_shape == CONFIG.LEFT_SHAPE) {
+              unrewarded_left_trials++;
+            }
+            if(last_shape == CONFIG.RIGHT_SHAPE) {
+              unrewarded_right_trials++;
+            } 
+          }
         } else {
+          if(last_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
+            unrewarded_left_trials--;
+            return true;
+          }
+          if(last_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0){
+            unrewarded_right_trials--;
+            return true;
+          }
           return false;
         }
       }
