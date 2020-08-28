@@ -156,7 +156,6 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         end_trial();
       }, trial.trial_duration);
     }
-
   };
 
   return plugin;
