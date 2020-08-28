@@ -42,6 +42,12 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         default: null,
         description: 'How long to hide the stimulus.'
       },
+      trial_duration_min: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Minimum Trial Duration',
+        default: null,
+        description: 'The minimum length of the trial if a response ends the trial.'
+      },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
@@ -114,7 +120,15 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
       }
 
       if (trial.response_ends_trial) {
-        end_trial();
+        if(trial.trial_duration_min !== null){
+          if(info.rt > trial.trial_duration_min){
+            end_trial();
+          } else {
+            jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration_min - info.rt);
+          }
+        } else {
+          end_trial();
+        }
       }
     };
 

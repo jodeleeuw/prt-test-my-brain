@@ -72,15 +72,25 @@
       choices: [32]
     }
 
-    var instructions_feedback_2 = {
-      type: 'audio-keyboard-response',
-      stimulus: 'mp3/reward-sound.mp3',
-      prompt: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
-      trial_duration: CONFIG.FEEDBACK_DURATION,
-      choices: jsPsych.NO_KEYS
+    if(CONFIG.PLAY_REWARD_AUDIO){
+      var reward = {
+        type: 'audio-keyboard-response',
+        stimulus: CONFIG.REWARD_SOUND,
+        prompt: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
+        trial_duration: CONFIG.FEEDBACK_DURATION,
+        choices: jsPsych.NO_KEYS
+      }
+    } else {
+      var reward = {
+        type: 'html-keyboard-response',
+        html: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
+        trial_duration: CONFIG.FEEDBACK_DURATION,
+        choices: jsPsych.NO_KEYS
+      }
     }
+    
 
-    var instructions_feedback_3 = {
+    var instructions_feedback_2 = {
       type: 'html-keyboard-response',
       stimulus: `<p><span style="color:red; font-weight:bold;">Not all</span> correct responses will receive a reward.</p>
         <p>At the end of the experiment you will be given the amount of money you have accumulated. The more correct identifications
@@ -89,7 +99,7 @@
       choices: [32]
     }
 
-    var instructions_feedback_4 = {
+    var instructions_feedback_3 = {
       type: 'html-keyboard-response',
       stimulus: `<p>We are now ready to begin the experiment.</p>
         <p>Remember, focus your attention on the fixation cross before each trial. If you think there are more ${CONFIG.LEFT_SHAPE}
@@ -100,7 +110,7 @@
     }
 
     var instructions_feedback = {
-      timeline: [instructions_feedback_1, instructions_feedback_2, instructions_feedback_3, instructions_feedback_4]
+      timeline: [instructions_feedback_1, reward, instructions_feedback_2, instructions_feedback_3]
     }
 
 
@@ -111,9 +121,6 @@
       stimulus: '<p class="fixation">+</p>',
       choices: jsPsych.NO_KEYS,
       trial_duration: CONFIG.FIXATION_DURATION,
-      data: {
-        task: 'fixation'
-      }
     }
 
     var target_display = {
@@ -122,6 +129,7 @@
         return `<img src="${jsPsych.timelineVariable('stimulus',true)}" style="width:${CONFIG.IMAGE_SIZE}px;"></img>`
       },
       stimulus_duration: CONFIG.STIMULUS_DURATION,
+      trial_duration_min: CONFIG.STIMULUS_DURATION,
       trial_duration: CONFIG.TRIAL_DURATION,
       choices: [CONFIG.LEFT_KEY,CONFIG.RIGHT_KEY],
       data: {
@@ -168,16 +176,10 @@
     }
 
     var feedback = {
-      timeline: [{
-        type: 'audio-keyboard-response',
-        stimulus: 'mp3/reward-sound.mp3',
-        prompt: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
-        trial_duration: CONFIG.FEEDBACK_DURATION,
-        choices: jsPsych.NO_KEYS,
-        data: {
-          task: 'reward-feedback'
-        }
-      }],
+      timeline: [reward],
+      data: {
+        task: 'reward-feedback'
+      },
       conditional_function: function(){
         var last_shape = jsPsych.data.get().last(1).values()[0].correct_shape;
         if(jsPsych.timelineVariable('rewarded', true) == 1){
@@ -212,16 +214,7 @@
 
     var practice_trials = {
       timeline: [fixation, target_display, practice_feedback],
-      timeline_variables: [
-        {block: null, trial: null, stimulus: 'img/7C_10S_yellow3.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7C_10S_yellow4.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7C_10S_yellow5.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7C_10S_yellow6.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7S_10C_yellow1.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7S_10C_yellow2.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7S_10C_yellow3.jpg', rewarded: null},
-        {block: null, trial: null, stimulus: 'img/7S_10C_yellow4.jpg', rewarded: null}
-      ],
+      timeline_variables: CONFIG.PRACTICE_TRIALS,
       data: {
         phase: 'practice'
       },
@@ -269,7 +262,7 @@
         var correct_trial_count = jsPsych.data.get().filter({task: 'respond', phase: 'test', correct: true}).count();
         var total_trial_count = jsPsych.data.get().filter({task: 'respond', phase: 'test'}).count();
         
-        var total_earned = jsPsych.data.get().filter({task: 'reward-feedback'}).count() * CONFIG.REWARD_AMOUNT / 100;
+        var total_earned = CONFIG.TOTAL_REWARD; //jsPsych.data.get().filter({task: 'reward-feedback'}).count() * CONFIG.REWARD_AMOUNT / 100;
 
         return `<p>You have completed the task!</p><p>You responded correctly on ${correct_trial_count} of ${total_trial_count} trials.</p>
           <p>You earned $${total_earned}!</p>`
@@ -287,10 +280,15 @@
     timeline.push(save_data);
     timeline.push(final_screen);
 
+    var audio = [];
+    if(CONFIG.PLAY_REWARD_AUDIO){
+      audio.push(CONFIG.REWARD_SOUND)
+    }
+
     jsPsych.init({
       timeline: timeline,
       preload_images: CONFIG.IMAGE_LIST,
-      preload_audio: ['mp3/reward-sound.mp3'],
+      preload_audio: audio,
       use_webaudio: false,
       experiment_width: 800
     })

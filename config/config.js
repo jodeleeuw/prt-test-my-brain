@@ -1,7 +1,7 @@
 var CONFIG = {
   FIXATION_DURATION: 500, // ms
   STIMULUS_DURATION: 350, // ms
-  TRIAL_DURATION: 2000, // ms
+  TRIAL_DURATION: null, // ms, or set to null to wait for a response
   FEEDBACK_DURATION: 1500, // ms
   LEFT_KEY: 'a', // use lowercase
   RIGHT_KEY: 'l', // use lowercase
@@ -12,7 +12,10 @@ var CONFIG = {
   IMAGE_SIZE: 500, // pixels
   ESTIMATED_TOTAL_DURATION: 10, // minutes
   TOTAL_BLOCKS: 3, 
-  REWARD_AMOUNT: 50 // cents
+  REWARD_AMOUNT: 20, // cents
+  TOTAL_REWARD: 24.20, // dollars
+  PLAY_REWARD_AUDIO: true,
+  REWARD_AUDIO: 'mp3/reward-coin-drop.mp3' // path to file (use mp3 if possible for browser compatibility), set to null if no sound
 }
 
 CONFIG.IMAGE_LIST = [
@@ -35,6 +38,18 @@ CONFIG.IMAGE_LIST = [
   'img/7S_10C_yellow9.jpg',
   'img/7S_10C_yellow10.jpg',
   'img/reward.gif'
+]
+
+// note that practice trials will be shown in a random order
+CONFIG.PRACTICE_TRIALS = [
+  {block: null, trial: null, stimulus: 'img/7C_10S_yellow3.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7C_10S_yellow4.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7C_10S_yellow5.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7C_10S_yellow6.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7S_10C_yellow1.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7S_10C_yellow2.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7S_10C_yellow3.jpg', rewarded: null},
+  {block: null, trial: null, stimulus: 'img/7S_10C_yellow4.jpg', rewarded: null}
 ]
 
 CONFIG.TRIAL_INFO = [
