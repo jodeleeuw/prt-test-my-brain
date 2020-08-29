@@ -83,7 +83,7 @@
     } else {
       var reward = {
         type: 'html-keyboard-response',
-        html: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
+        stimulus: `<img src="img/reward.gif"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`,
         trial_duration: CONFIG.FEEDBACK_DURATION,
         choices: jsPsych.NO_KEYS
       }

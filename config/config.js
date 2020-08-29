@@ -15,7 +15,7 @@ var CONFIG = {
   TOTAL_BLOCKS: 3, 
   REWARD_AMOUNT: 20, // cents
   TOTAL_REWARD: 24.20, // dollars
-  PLAY_REWARD_AUDIO: true,
+  PLAY_REWARD_AUDIO: false,
   REWARD_SOUND: 'mp3/reward-coin-drop.mp3' // path to file (use mp3 if possible for browser compatibility), set to null if no sound
 }
 
