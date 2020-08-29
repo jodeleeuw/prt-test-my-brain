@@ -147,18 +147,45 @@
           data.correct_shape = "circles"
         }
         if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(CONFIG.LEFT_KEY)){
-          data.correct = data.correct_shape == CONFIG.LEFT_SHAPE
+          data.response = CONFIG.LEFT_SHAPE;
+          data.correct = data.correct_shape == CONFIG.LEFT_SHAPE;
         }
         if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(CONFIG.RIGHT_KEY)){
-          data.correct = data.correct_shape == CONFIG.RIGHT_SHAPE
+          data.response = CONFIG.RIGHT_SHAPE;
+          data.correct = data.correct_shape == CONFIG.RIGHT_SHAPE;
         }
+      }
+    }
+
+    var response_display = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: function(){
+          var data = jsPsych.data.get().last(1).values()[0];
+          if(data.response == "circles"){
+            return `<img src="img/yellow_circle.jpeg"></img>`
+          }
+          if(data.response == "squares"){
+            return `<img src="img/yellow_square.jpeg"></img>`
+          }
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function(){
+          // var last_trial_duration = jsPsych.data.get().last(1).values()[0].rt;
+          // var gap = CONFIG.ISI - last_trial_duration;
+          // return gap;
+          return CONFIG.RESPONSE_DISPLAY_DURATION;
+        }
+      }],
+      conditional_function: function(){
+        return jsPsych.data.get().last(1).values()[0].key_press !== null;
       }
     }
 
     var practice_feedback = {
       type: 'html-keyboard-response',
       stimulus: function(){
-        var last_trial = jsPsych.data.get().last(1).values()[0]
+        var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
         if(last_trial.key_press == null){
           return `<p class="feedback">Please respond faster.</p>`;
         }
@@ -181,9 +208,9 @@
         task: 'reward-feedback'
       },
       conditional_function: function(){
-        var last_shape = jsPsych.data.get().last(1).values()[0].correct_shape;
+        var last_shape = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct_shape;
         if(jsPsych.timelineVariable('rewarded', true) == 1){
-          if(jsPsych.data.get().last(1).values()[0].correct){
+          if(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct){
             return true;
           } else {
             if(last_shape == CONFIG.LEFT_SHAPE) {
@@ -195,7 +222,7 @@
             return false; 
           }
         } else {
-          if(jsPsych.data.get().last(1).values()[0].correct){
+          if(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct){
             if(last_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
               unrewarded_left_trials--;
               return true;
@@ -231,7 +258,7 @@
     /* real version */
     
     var test_procedure = {
-      timeline: [fixation, target_display, feedback],
+      timeline: [fixation, target_display, response_display, feedback],
       timeline_variables: CONFIG.TRIAL_INFO,
       data: {
         phase: 'test'
@@ -273,9 +300,9 @@
     /* initialization */
     var timeline = [];
 
-    timeline.push(instructions_intro);
-    timeline.push(practice_procedure);
-    timeline.push(instructions_feedback);
+    //timeline.push(instructions_intro);
+    //timeline.push(practice_procedure);
+    //timeline.push(instructions_feedback);
     timeline.push(test_procedure);
     timeline.push(save_data);
     timeline.push(final_screen);

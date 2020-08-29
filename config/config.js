@@ -1,8 +1,9 @@
 var CONFIG = {
-  FIXATION_DURATION: 500, // ms
-  STIMULUS_DURATION: 350, // ms
-  TRIAL_DURATION: null, // ms, or set to null to wait for a response
-  FEEDBACK_DURATION: 1500, // ms
+  FIXATION_DURATION: 500, // ms (how long to show the fixation cross)
+  STIMULUS_DURATION: 350, // ms (how long to show the stimulus for classification)
+  TRIAL_DURATION: null, // ms, (maximum duration to wait for a response before continuing; or set to null to wait for a response indefinitely)
+  FEEDBACK_DURATION: 1500, // ms (how long to show the feedback when it appears)
+  RESPONSE_DISPLAY_DURATION: 1000, // ms (how long to show the image corresponding to the response that the subject made)
   LEFT_KEY: 'a', // use lowercase
   RIGHT_KEY: 'l', // use lowercase
   LEFT_SHAPE: 'circles', // use plural form
@@ -15,7 +16,7 @@ var CONFIG = {
   REWARD_AMOUNT: 20, // cents
   TOTAL_REWARD: 24.20, // dollars
   PLAY_REWARD_AUDIO: true,
-  REWARD_AUDIO: 'mp3/reward-coin-drop.mp3' // path to file (use mp3 if possible for browser compatibility), set to null if no sound
+  REWARD_SOUND: 'mp3/reward-coin-drop.mp3' // path to file (use mp3 if possible for browser compatibility), set to null if no sound
 }
 
 CONFIG.IMAGE_LIST = [
@@ -37,7 +38,9 @@ CONFIG.IMAGE_LIST = [
   'img/7S_10C_yellow8.jpg',
   'img/7S_10C_yellow9.jpg',
   'img/7S_10C_yellow10.jpg',
-  'img/reward.gif'
+  'img/reward.gif',
+  'img/yellow_circle.jpeg',
+  'img/yellow_square.jpeg'
 ]
 
 // note that practice trials will be shown in a random order
