@@ -61,25 +61,27 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // setup stimulus
-    var context = jsPsych.pluginAPI.audioContext();
-    if(context !== null){
-      var source = context.createBufferSource();
-      source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-      source.connect(context.destination);
-    } else {
-      var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-      audio.currentTime = 0;
-    }
-
-    // set up end event if trial needs it
-
-    if(trial.trial_ends_after_audio){
+    if(trial.stimulus !== null){
+      var context = jsPsych.pluginAPI.audioContext();
       if(context !== null){
-        source.onended = function() {
-          end_trial();
-        }
+        var source = context.createBufferSource();
+        source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
+        source.connect(context.destination);
       } else {
-        audio.addEventListener('ended', end_trial);
+        var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
+        audio.currentTime = 0;
+      }
+
+      // set up end event if trial needs it
+
+      if(trial.trial_ends_after_audio){
+        if(context !== null){
+          source.onended = function() {
+            end_trial();
+          }
+        } else {
+          audio.addEventListener('ended', end_trial);
+        }
       }
     }
 
@@ -102,14 +104,16 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
       // stop the audio file if it is playing
       // remove end event listeners if they exist
-      if(context !== null){
-        source.stop();
-        source.onended = function() { }
-      } else {
-        audio.pause();
-        audio.removeEventListener('ended', end_trial);
+      if(trial.stimulus !== null){
+        if(context !== null){
+          source.stop();
+          source.onended = function() { }
+        } else {
+          audio.pause();
+          audio.removeEventListener('ended', end_trial);
+        }
       }
-
+      
       // kill keyboard listeners
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
@@ -144,11 +148,13 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     };
 
     // start audio
-    if(context !== null){
-      startTime = context.currentTime;
-      source.start(startTime);
-    } else {
-      audio.play();
+    if(trial.stimulus !== null){
+      if(context !== null){
+        startTime = context.currentTime;
+        source.start(startTime);
+      } else {
+        audio.play();
+      }
     }
 
     // start the response listener

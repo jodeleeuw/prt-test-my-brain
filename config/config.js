@@ -12,7 +12,8 @@ var CONFIG = {
   RIGHT_EXAMPLE: 'img/7C_10S_yellow3.jpg',
   IMAGE_SIZE: 500, // pixels
   ESTIMATED_TOTAL_DURATION: 10, // minutes
-  TOTAL_BLOCKS: 3, 
+  TOTAL_BLOCKS: 3, // make sure this matches the numbers assigned in the stimulus info below
+  BREAK_LENGTH: 10000, // ms length of break between blocks
   REWARD_AMOUNT: 20, // cents
   TOTAL_REWARD: 24.20, // dollars
   PLAY_REWARD_AUDIO: true,

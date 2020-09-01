@@ -182,26 +182,59 @@
       }
     }
 
-    var practice_feedback = {
-      type: 'html-keyboard-response',
-      stimulus: function(){
-        var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
-        if(last_trial.key_press == null){
-          return `<p class="feedback">Please respond faster.</p>`;
+    if(CONFIG.PLAY_REWARD_AUDIO){
+      var practice_feedback = {
+        type: 'audio-keyboard-response',
+        stimulus: function(){
+          var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
+          if(last_trial.key_press == null){
+            return null;
+          }
+          if(last_trial.correct){
+            return CONFIG.REWARD_SOUND;
+          } else {
+            return null;
+          }
+        },
+        prompt: function(){
+          var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
+          if(last_trial.key_press == null){
+            return `<p class="feedback">Please respond faster.</p>`;
+          }
+          if(last_trial.correct){
+            return `<p class="feedback">Correct</p>`
+          } else {
+            return `<p class="feedback">Incorrect</p>`
+          }
+        },
+        trial_duration: CONFIG.FEEDBACK_DURATION,
+        choices: jsPsych.NO_KEYS,
+        data: {
+          task: 'accuracy-feedback'
         }
-        if(last_trial.correct){
-          return `<p class="feedback">Correct</p>`
-        } else {
-          return `<p class="feedback">Incorrect</p>`
+      }
+    } else {
+      var practice_feedback = {
+        type: 'html-keyboard-response',
+        stimulus: function(){
+          var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
+          if(last_trial.key_press == null){
+            return `<p class="feedback">Please respond faster.</p>`;
+          }
+          if(last_trial.correct){
+            return `<p class="feedback">Correct</p>`
+          } else {
+            return `<p class="feedback">Incorrect</p>`
+          }
+        },
+        trial_duration: CONFIG.FEEDBACK_DURATION,
+        choices: jsPsych.NO_KEYS,
+        data: {
+          task: 'accuracy-feedback'
         }
-      },
-      trial_duration: CONFIG.FEEDBACK_DURATION,
-      choices: jsPsych.NO_KEYS,
-      data: {
-        task: 'accuracy-feedback'
       }
     }
-
+   
     var feedback = {
       timeline: [reward],
       data: {
@@ -256,12 +289,30 @@
     }
 
     /* real version */
-    
+
     var test_procedure = {
-      timeline: [fixation, target_display, response_display, feedback],
-      timeline_variables: CONFIG.TRIAL_INFO,
+      timeline: [],
       data: {
         phase: 'test'
+      }
+    }
+    for(var b=1; b<=CONFIG.TOTAL_BLOCKS; b++){
+      var test_block = {
+        timeline: [fixation, target_display, response_display, feedback],
+        timeline_variables: CONFIG.TRIAL_INFO.filter(function(x){ return x.block == b}),
+        data: {
+          block: b
+        }
+      }
+      test_procedure.timeline.push(test_block);
+      if(b < CONFIG.TOTAL_BLOCKS){
+        var rest = {
+          type: 'html-keyboard-response',
+          stimulus: '<p>BREAK</p>',
+          trial_duration: CONFIG.BREAK_LENGTH,
+          choices: jsPsych.NO_KEYS
+        }
+        test_procedure.timeline.push(rest);
       }
     }
 
