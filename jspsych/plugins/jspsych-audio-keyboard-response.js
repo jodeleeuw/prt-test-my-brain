@@ -21,7 +21,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       stimulus: {
         type: jsPsych.plugins.parameterType.AUDIO,
         pretty_name: 'Stimulus',
-        default: undefined,
+        default: null,
         description: 'The audio to be played.'
       },
       choices: {
@@ -158,7 +158,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     // start the response listener
-    if(context !== null) {
+    if(context !== null && typeof context !== 'undefined') {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,

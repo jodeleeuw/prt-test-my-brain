@@ -8,7 +8,7 @@
     <script type="text/javascript" src="TestMyBrain.12.18.min.js"></script>
     <link rel="stylesheet" href="jspsych/css/jspsych.css">
     <link rel="stylesheet" href="css/prt.css">
-    <script src="config/config.js"></script>
+    <script src="config/config-short.js"></script>
   </head>
   <body></body>
   <script>
@@ -273,7 +273,7 @@
     /* practice version */
 
     var practice_trials = {
-      timeline: [fixation, target_display, practice_feedback],
+      timeline: [fixation, target_display, response_display, practice_feedback],
       timeline_variables: CONFIG.PRACTICE_TRIALS,
       data: {
         phase: 'practice'
@@ -308,7 +308,8 @@
       if(b < CONFIG.TOTAL_BLOCKS){
         var rest = {
           type: 'html-keyboard-response',
-          stimulus: '<p>BREAK</p>',
+          stimulus: `<p>You have completed ${b} of ${CONFIG.TOTAL_BLOCKS} blocks of trials.</p>
+            <p>The next block will begin in ${CONFIG.BREAK_LENGTH/1000} seconds.</p>`,
           trial_duration: CONFIG.BREAK_LENGTH,
           choices: jsPsych.NO_KEYS
         }
@@ -343,7 +344,7 @@
         var total_earned = CONFIG.TOTAL_REWARD; //jsPsych.data.get().filter({task: 'reward-feedback'}).count() * CONFIG.REWARD_AMOUNT / 100;
 
         return `<p>You have completed the task!</p><p>You responded correctly on ${correct_trial_count} of ${total_trial_count} trials.</p>
-          <p>You earned $${total_earned}!</p>`
+          <p>You earned $${total_earned.toFixed(2)}!</p>`
       }
     }
 
@@ -351,9 +352,9 @@
     /* initialization */
     var timeline = [];
 
-    //timeline.push(instructions_intro);
-    //timeline.push(practice_procedure);
-    //timeline.push(instructions_feedback);
+    timeline.push(instructions_intro);
+    timeline.push(practice_procedure);
+    timeline.push(instructions_feedback);
     timeline.push(test_procedure);
     timeline.push(save_data);
     timeline.push(final_screen);
