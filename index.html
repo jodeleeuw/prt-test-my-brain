@@ -234,6 +234,13 @@
         }
       }
     }
+
+    var blank_screen = {
+      type: 'html-keyboard-response',
+      stimulus: '',
+      trial_duration: CONFIG.FEEDBACK_DURATION,
+      choices: jsPsych.NO_KEYS
+    }
    
     var feedback = {
       timeline: [reward],
@@ -270,10 +277,21 @@
       }
     }
 
+    
+
+    var blank_in_place_of_feedback = {
+      timeline: [blank_screen],
+      conditional_function: function(){
+        // this checks if the last trial was a feedback trial, in which case
+        // we don't need to show this blank screen
+        return jsPsych.data.get().last(1).values()[0].task != 'reward-feedback';
+      }
+    }
+
     /* practice version */
 
     var practice_trials = {
-      timeline: [fixation, target_display, response_display, practice_feedback],
+      timeline: [fixation, target_display, practice_feedback, blank_in_place_of_feedback],
       timeline_variables: CONFIG.PRACTICE_TRIALS,
       data: {
         phase: 'practice'
@@ -298,7 +316,7 @@
     }
     for(var b=1; b<=CONFIG.TOTAL_BLOCKS; b++){
       var test_block = {
-        timeline: [fixation, target_display, response_display, feedback],
+        timeline: [fixation, target_display, feedback, blank_in_place_of_feedback],
         timeline_variables: CONFIG.TRIAL_INFO.filter(function(x){ return x.block == b}),
         data: {
           block: b
@@ -343,8 +361,16 @@
         
         var total_earned = CONFIG.TOTAL_REWARD; //jsPsych.data.get().filter({task: 'reward-feedback'}).count() * CONFIG.REWARD_AMOUNT / 100;
 
-        return `<p>You have completed the task!</p><p>You responded correctly on ${correct_trial_count} of ${total_trial_count} trials.</p>
+        if(CONFIG.SHOW_ACCURACY_AT_END){
+          return `<p>You have completed the task!</p>
+          <p>You responded correctly on ${correct_trial_count} of ${total_trial_count} trials.</p>
           <p>You earned $${total_earned.toFixed(2)}!</p>`
+        } else {
+          return `<p>You have completed the task!</p>
+          <p>You earned $${total_earned.toFixed(2)}!</p>`
+        }
+
+        
       }
     }
 

@@ -17,7 +17,8 @@ var CONFIG = {
   REWARD_AMOUNT: 20, // cents
   TOTAL_REWARD: 24.20, // dollars
   PLAY_REWARD_AUDIO: true,
-  REWARD_SOUND: 'mp3/reward-coin-drop.mp3' // path to file (use mp3 if possible for browser compatibility), set to null if no sound
+  REWARD_SOUND: 'mp3/reward-coin-drop.mp3', // path to file (use mp3 if possible for browser compatibility), set to null if no sound
+  SHOW_ACCURACY_AT_END: false // show "you responded correctly on X of N trials" at the end screen?
 }
 
 CONFIG.IMAGE_LIST = [
