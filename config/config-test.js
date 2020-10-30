@@ -76,10 +76,6 @@ CONFIG.IMAGE_LIST = [
 CONFIG.PRACTICE_TRIALS = [
   {block: null, trial: null, stimulus: 'img/7C_10S_yellow3.jpg', rewarded: null},
   {block: null, trial: null, stimulus: 'img/7C_10S_yellow4.jpg', rewarded: null},
-  {block: null, trial: null, stimulus: 'img/7C_10S_yellow5.jpg', rewarded: null},
-  {block: null, trial: null, stimulus: 'img/7C_10S_yellow6.jpg', rewarded: null},
-  {block: null, trial: null, stimulus: 'img/7S_10C_yellow1.jpg', rewarded: null},
-  {block: null, trial: null, stimulus: 'img/7S_10C_yellow2.jpg', rewarded: null},
   {block: null, trial: null, stimulus: 'img/7S_10C_yellow3.jpg', rewarded: null},
   {block: null, trial: null, stimulus: 'img/7S_10C_yellow4.jpg', rewarded: null}
 ]
