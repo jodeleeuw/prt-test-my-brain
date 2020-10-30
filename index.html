@@ -92,9 +92,9 @@
         stimulus: CONFIG.REWARD_SOUND,
         prompt: function(){
           if(CONFIG.REWARD_AMOUNT == 0 || CONFIG.REWARD_AMOUNT == null){
-            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
-          } else {
             return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct!</p>`
+          } else {
+            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
           }
         },
         trial_duration: CONFIG.FEEDBACK_DURATION,
@@ -105,9 +105,9 @@
         type: 'html-keyboard-response',
         stimulus: function(){
           if(CONFIG.REWARD_AMOUNT == 0 || CONFIG.REWARD_AMOUNT == null){
-            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
-          } else {
             return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct!</p>`
+          } else {
+            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
           }
         },
         trial_duration: CONFIG.FEEDBACK_DURATION,
