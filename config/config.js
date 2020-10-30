@@ -28,7 +28,7 @@ var CONFIG = {
   STIMULUS_DURATION: 350, // ms (how long to show the stimulus for classification)
   TRIAL_DURATION: null, // ms, (maximum duration to wait for a response before continuing; or set to null to wait for a response indefinitely)
   FEEDBACK_DURATION: 1500, // ms (how long to show the feedback when it appears)
-  RESPONSE_DISPLAY_DURATION: 1000, // ms (how long to show the image corresponding to the response that the subject made)
+  // RESPONSE_DISPLAY_DURATION: 1000, // ms (how long to show the image corresponding to the response that the subject made) (not used currently)
   LEFT_KEY: 'a', // use lowercase
   RIGHT_KEY: 'l', // use lowercase
   LEFT_SHAPE: 'circles', // use plural form
