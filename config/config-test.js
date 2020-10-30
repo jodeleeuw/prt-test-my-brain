@@ -24,10 +24,10 @@ displayed. The rewarded variable controls whether the stimulus will be rewarded 
 
 // SECTION 1 //
 var CONFIG = {
-  FIXATION_DURATION: 100, // ms (how long to show the fixation cross)
+  FIXATION_DURATION: 150, // ms (how long to show the fixation cross)
   STIMULUS_DURATION: 350, // ms (how long to show the stimulus for classification)
   TRIAL_DURATION: null, // ms, (maximum duration to wait for a response before continuing; or set to null to wait for a response indefinitely)
-  FEEDBACK_DURATION: 500, // ms (how long to show the feedback when it appears)
+  FEEDBACK_DURATION: 800, // ms (how long to show the feedback when it appears)
   // RESPONSE_DISPLAY_DURATION: 1000, // ms (how long to show the image corresponding to the response that the subject made) (not used currently)
   LEFT_KEY: 'a', // use lowercase
   RIGHT_KEY: 'l', // use lowercase
