@@ -118,10 +118,15 @@
 
     var instructions_feedback_2 = {
       type: 'html-keyboard-response',
-      stimulus: `<p><span style="color:red; font-weight:bold;">Not all</span> correct responses will receive a reward.</p>
-        <p>At the end of the experiment you will be given the amount of money you have accumulated. The more correct identifications
-        you make, the more money you will take home.</p>
-        <p>Press the spacebar to continue.</p>`,
+      stimulus: function(){
+        var html =  `<p><span style="color:red; font-weight:bold;">Not all</span> correct responses will receive a reward.</p>`
+        if(CONFIG.REWARD_AMOUNT != 0 && CONFIG.REWARD_AMOUNT != null){
+          html += `<p>At the end of the experiment you will be given the amount of money you have accumulated. The more correct identifications
+          you make, the more money you will take home.</p>`
+        }
+        html += `<p>Press the spacebar to continue.</p>`;
+        return html;
+      },
       choices: [32]
     }
 
