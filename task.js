@@ -393,7 +393,9 @@
         }
         if(CONFIG.REWARD_AMOUNT != null && CONFIG.REWARD_AMOUNT != 0){
           output_html += `<p>You earned $${total_earned.toFixed(2)}!</p>`
-        }       
+        }
+        output_html += `<p>You are now finished with the task. Please close your browser.</p>`
+        return output_html;       
       }
     }
 
