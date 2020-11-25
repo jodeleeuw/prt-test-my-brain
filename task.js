@@ -155,6 +155,8 @@
         trial: jsPsych.timelineVariable('trial'),
         rewarded: jsPsych.timelineVariable('rewarded'),
         image: jsPsych.timelineVariable('stimulus'),
+        unrewarded_left_trials: function() { return unrewarded_left_trials; },
+        unrewarded_right_trials: function() { return unrewarded_right_trials; },
         task: 'respond'
       },
       on_finish: function(data){
@@ -171,6 +173,32 @@
         if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(CONFIG.RIGHT_KEY)){
           data.response = CONFIG.RIGHT_SHAPE;
           data.correct = data.correct_shape == CONFIG.RIGHT_SHAPE;
+        }
+        // below is to calculate whether a reward should be displayed on this trial
+        if(jsPsych.timelineVariable('rewarded', true) == 1){
+          if(data.correct){
+            data.did_reward = true;
+          } else {
+            if(data.correct_shape == CONFIG.LEFT_SHAPE) {
+              unrewarded_left_trials++;
+            }
+            if(data.correct_shape == CONFIG.RIGHT_SHAPE) {
+              unrewarded_right_trials++;
+            }
+            data.did_reward = false; 
+          }
+        } else {
+          if(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct){
+            if(data.correct_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
+              unrewarded_left_trials--;
+              data.did_reward = true;
+            }
+            if(data.correct_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0){
+              unrewarded_right_trials--;
+              data.did_reward = true;
+            }
+          }
+          data.did_reward = false;
         }
       }
     }
@@ -266,32 +294,7 @@
         task: 'reward-feedback'
       },
       conditional_function: function(){
-        var last_shape = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct_shape;
-        if(jsPsych.timelineVariable('rewarded', true) == 1){
-          if(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct){
-            return true;
-          } else {
-            if(last_shape == CONFIG.LEFT_SHAPE) {
-              unrewarded_left_trials++;
-            }
-            if(last_shape == CONFIG.RIGHT_SHAPE) {
-              unrewarded_right_trials++;
-            }
-            return false; 
-          }
-        } else {
-          if(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].correct){
-            if(last_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0){
-              unrewarded_left_trials--;
-              return true;
-            }
-            if(last_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0){
-              unrewarded_right_trials--;
-              return true;
-            }
-          }
-          return false;
-        }
+        return jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].did_reward;
       }
     }
 
