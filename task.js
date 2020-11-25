@@ -399,6 +399,12 @@
         }
         output_html += `<p>You are now finished with the task. Please close your browser.</p>`
         return output_html;       
+      },
+      on_load: function(){
+        if(CONFIG.SAVE_DATA_TYPE == 'cognition'){
+          // if running on cognition.run, this seems to help with saving final bit of data and marking the task as finalized.
+          jsPsych.endExperiment();
+        }
       }
     }
 
