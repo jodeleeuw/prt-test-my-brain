@@ -29,6 +29,7 @@ process.file <- function(file){
   test.data <- data %>% 
     filter(phase == 'test', task == 'respond') %>%
     mutate(trial = 1:n()) %>%
+    mutate(trial.copy = trial) %>%
     mutate(condition = if_else(correct_shape == short.shape, 'short', 'long')) %>%
     mutate(time = round(as.numeric(rt))) %>%
     mutate(key_press = tolower(intToUtf8(as.numeric(key_press), multiple=T))) %>%
@@ -39,7 +40,7 @@ process.file <- function(file){
     mutate(short_due = if_else(left.shape == short.shape, unrewarded_left_trials, unrewarded_right_trials)) %>%
     mutate(long_due = if_else(left.shape == long.shape, unrewarded_left_trials, unrewarded_right_trials)) %>%
     ungroup() %>%
-    select(trial, condition, time, key_press, correct, did_reward, reward_due, short_due, long_due)
+    select(trial, condition, time, key_press, trial.copy, correct, did_reward, reward_due, short_due, long_due)
   
   data.time <- data$recorded_at[1]
   sf <- stamp("6/7/2019 5:16:52 PM", orders = "mdY IMS p", quiet = T)
@@ -51,7 +52,7 @@ process.file <- function(file){
   short.key.string <- paste0("Short Key: ", short.key)
   long.key.string <- paste0("Long Key: ", long.key)
   
-  bias.string <- ifelse(bias.shape == long.shape, 'long', 'short')
+  bias.string <- paste0("Bias: ", ifelse(bias.shape == long.shape, 'long', 'short'))
   
   outputFile <- paste(output.folder, paste0("out-",str_replace(file,'.csv','.txt')), sep="/")
   write_lines(c(
@@ -59,9 +60,9 @@ process.file <- function(file){
     date.time.string,
     subject.string,
     "Session: 1",
-    "Short Key: ",
-    "Long Key: ",
-    "Bias: ",
+    short.key.string,
+    long.key.string,
+    bias.string,
     "-",
     "-",
     "-",
