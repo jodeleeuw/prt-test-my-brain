@@ -43,9 +43,9 @@
       type: 'html-keyboard-response',
       stimulus: `<p style="font-size: 18px;">More ${CONFIG.LEFT_SHAPE}</p>
         <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
-        <p>The [${CONFIG.LEFT_KEY}] key will be used to identify pictures with <span style="text-decoration: underline;">more ${CONFIG.LEFT_SHAPE}.</span></p>
+        <p>The [${CONFIG.LEFT_KEY.toUpperCase()}] key will be used to identify pictures with <span style="text-decoration: underline;">more ${CONFIG.LEFT_SHAPE}.</span></p>
         <img style="width:${CONFIG.IMAGE_SIZE/2}px;" src="${CONFIG.LEFT_EXAMPLE}"></img>
-        <p>Press the [${CONFIG.LEFT_KEY}] key to continue.</p>`,
+        <p>Press the [${CONFIG.LEFT_KEY.toUpperCase()}] key to continue.</p>`,
       choices: [CONFIG.LEFT_KEY]
     }
 
@@ -53,9 +53,9 @@
       type: 'html-keyboard-response',
       stimulus: `<p style="font-size: 18px;">More ${CONFIG.RIGHT_SHAPE}</p>
         <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
-        <p>The [${CONFIG.RIGHT_KEY}] key will be used to identify pictures with <span style="text-decoration: underline;">more ${CONFIG.RIGHT_SHAPE}.</span></p>
+        <p>The [${CONFIG.RIGHT_KEY.toUpperCase()}] key will be used to identify pictures with <span style="text-decoration: underline;">more ${CONFIG.RIGHT_SHAPE}.</span></p>
         <img style="width:${CONFIG.IMAGE_SIZE/2}px;" src="${CONFIG.RIGHT_EXAMPLE}"></img>
-        <p>Press the [${CONFIG.RIGHT_KEY}] key to continue.</p>`,
+        <p>Press the [${CONFIG.RIGHT_KEY.toUpperCase()}] key to continue.</p>`,
       choices: [CONFIG.RIGHT_KEY]
     }
 
