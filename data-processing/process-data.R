@@ -9,9 +9,6 @@ input.folder <- 'data-input' # will process all files in this folder
 output.folder <- 'data-output' # ... and create a copy in this folder with prefix out-
 long.shape <- 'squares' 
 short.shape <- 'circles'
-bias.shape <- 'squares' # TODO: extract these from script
-left.shape <- 'circles'
-right.shape <- 'squares'
 
 ### REST RUNS AUTOMATICALLY
 
@@ -25,6 +22,10 @@ process.file <- function(file){
   short.key <- (data %>% 
     filter(phase=='test', correct_shape == short.shape, correct == "true") %>%
     pull(key_press))[1] %>% as.numeric() %>% intToUtf8() %>% tolower()
+  
+  bias.shape <- data[1,'bias_shape']
+  left.shape <- data[1,'left_shape']
+  right.shape <- data[1,'right_shape']
   
   test.data <- data %>% 
     filter(phase == 'test', task == 'respond') %>%
