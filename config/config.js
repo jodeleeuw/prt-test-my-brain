@@ -33,6 +33,7 @@ var CONFIG = {
   RIGHT_KEY: 'l', // use lowercase
   LEFT_SHAPE: 'circles', // use plural form
   RIGHT_SHAPE: 'squares', // use plural form
+  BIAS_SHAPE: 'squares', // this is only for the purpose of recording in the data. actual bias is determined by the trial variables in SECTION 4.
   LEFT_EXAMPLE: 'img/7S_10C_yellow1.jpg', // for instructions page, example shown on the left side for left key
   RIGHT_EXAMPLE: 'img/7C_10S_yellow3.jpg', // for instructions page, example shown on the right side for right key
   LEFT_SINGLE_EXAMPLE: 'img/yellow_circle.jpeg', // for instructions, a single example of the shape

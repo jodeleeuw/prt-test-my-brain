@@ -7,6 +7,13 @@
       head.appendChild(js);
     }
 
+    /* add condition info to data */
+    jsPsych.data.addProperties({
+      left_shape: CONFIG.LEFT_SHAPE,
+      right_shape: CONFIG.RIGHT_SHAPE,
+      bias_shape: CONFIG.BIAS_SHAPE
+    });
+
     /* reward setup */
     var unrewarded_left_trials = 0;
     var unrewarded_right_trials = 0;
