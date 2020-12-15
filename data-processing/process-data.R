@@ -7,9 +7,9 @@ library(lubridate)
 
 input.folder <- 'data-input' # will process all files in this folder
 output.folder <- 'data-output' # ... and create a copy in this folder with prefix out-
-long.shape <- 'squares'
+long.shape <- 'squares' 
 short.shape <- 'circles'
-bias.shape <- 'squares'
+bias.shape <- 'squares' # TODO: extract these from script
 left.shape <- 'circles'
 right.shape <- 'squares'
 
@@ -46,7 +46,7 @@ process.file <- function(file){
   sf <- stamp("6/7/2019 5:16:52 PM", orders = "mdY IMS p", quiet = T)
   date.time.string <- sf(data.time)
   
-  subject <- str_extract(file, pattern="[0-9]{1,4}")
+  subject <- str_extract(file, pattern="[0-9]{1,4}.csv") %>% str_sub(start=1,end=-5)
   subject.string <- paste0("Subject: ", subject)
   
   short.key.string <- paste0("Short Key: ", short.key)
