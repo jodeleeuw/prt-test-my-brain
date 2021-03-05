@@ -20,6 +20,17 @@
     
     /* instructions */
 
+    var id_entry = {
+      type: 'survey-text',
+      preamble: '<p style="font-size:24px;">Welcome to the task!</p>',
+      questions: [
+        {prompt: 'Please enter your ID in the text box below.'}
+      ],
+      data: {
+        task: 'id'
+      }
+    }
+
     var instructions_intro_1 = {
       type: 'html-keyboard-response',
       stimulus: `<p>Welcome! Please position your index fingers on the "${CONFIG.LEFT_KEY.toUpperCase()}" and "${CONFIG.RIGHT_KEY.toUpperCase()}" keys for this experiment.
@@ -439,6 +450,7 @@
     /* initialization */
     var timeline = [];
 
+    timeline.push(id_entry);
     timeline.push(instructions_intro);
     timeline.push(practice_procedure);
     timeline.push(instructions_feedback);
