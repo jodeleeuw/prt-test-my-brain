@@ -24,7 +24,7 @@
       type: 'survey-text',
       preamble: '<p style="font-size:24px;">Welcome to the task!</p>',
       questions: [
-        {prompt: 'Please enter your ID in the text box below.'}
+        {prompt: CONFIG.ID_MESSAGE}
       ],
       data: {
         task: 'id'
