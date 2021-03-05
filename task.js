@@ -204,6 +204,10 @@
         if(data.image.includes('7S_10C')){
           data.correct_shape = "circles"
         }
+        if(data.key_press == null){
+          data.response = null;
+          data.correct = false;
+        }
         if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(CONFIG.LEFT_KEY)){
           data.response = CONFIG.LEFT_SHAPE;
           data.correct = data.correct_shape == CONFIG.LEFT_SHAPE;
@@ -238,6 +242,18 @@
           }
           data.did_reward = false;
         }
+      }
+    }
+
+    var timeout_display = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: `<p>Time out!</p>
+          <p>Press the ${CONFIG.LEFT_KEY.toUpperCase()} or ${CONFIG.RIGHT_KEY.toUpperCase()} key to continue.</p>`,
+        choices: [CONFIG.LEFT_KEY, CONFIG.RIGHT_KEY]
+      }],
+      conditional_function: function(){
+        return jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].response == null;
       }
     }
 
@@ -375,7 +391,7 @@
     }
     for(var b=1; b<=CONFIG.TOTAL_BLOCKS; b++){
       var test_block = {
-        timeline: [fixation, target_display, feedback, blank_in_place_of_feedback],
+        timeline: [fixation, target_display, timeout_display, feedback, blank_in_place_of_feedback],
         timeline_variables: CONFIG.TRIAL_INFO.filter(function(x){ return x.block == b}),
         data: {
           block: b
