@@ -174,9 +174,17 @@
 
     var fixation = {
       type: 'html-keyboard-response',
-      stimulus: '<p class="fixation">+</p>',
+      stimulus: `<p class="fixation">+</p>`,
       choices: jsPsych.NO_KEYS,
       trial_duration: CONFIG.FIXATION_DURATION,
+      prompt: `<div style="position: absolute; top: 2vh; left: 2vw;">
+          <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+        </div>
+        <div style="position: absolute; top: 2vh; right: 2vw;">
+          <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+        </div>`
     }
 
     var target_display = {
@@ -184,6 +192,15 @@
       stimulus: function(){
         return `<img src="${jsPsych.timelineVariable('stimulus',true)}" style="width:${CONFIG.IMAGE_SIZE}px;"></img>`
       },
+      prompt: `
+        <div style="position: absolute; top: 2vh; left: 2vw;">
+          <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+        </div>
+        <div style="position: absolute; top: 2vh; right: 2vw;">
+          <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+        </div>`,
       stimulus_duration: CONFIG.STIMULUS_DURATION,
       trial_duration_min: CONFIG.STIMULUS_DURATION,
       trial_duration: CONFIG.TRIAL_DURATION,
