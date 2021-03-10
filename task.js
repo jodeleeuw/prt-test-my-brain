@@ -116,11 +116,22 @@
         type: 'audio-keyboard-response',
         stimulus: CONFIG.REWARD_SOUND,
         prompt: function(){
+          var fb = ""
           if(CONFIG.REWARD_AMOUNT == 0 || CONFIG.REWARD_AMOUNT == null){
-            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct!</p>`
+            fb = `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct!</p>`
           } else {
-            return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
+            fb = `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
           }
+          fb += `
+          <div style="position: absolute; top: 2vh; left: 2vw;">
+            <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+          </div>
+          <div style="position: absolute; top: 2vh; right: 2vw;">
+            <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+          </div>`
+          return fb;
         },
         trial_duration: CONFIG.FEEDBACK_DURATION,
         choices: jsPsych.NO_KEYS
@@ -135,6 +146,15 @@
             return `<img src="${CONFIG.REWARD_IMAGE}"></img><p class="feedback">Correct! You win ${CONFIG.REWARD_AMOUNT} cents!</p>`
           }
         },
+        prompt: `
+        <div style="position: absolute; top: 2vh; left: 2vw;">
+          <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+        </div>
+        <div style="position: absolute; top: 2vh; right: 2vw;">
+          <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+        </div>`,
         trial_duration: CONFIG.FEEDBACK_DURATION,
         choices: jsPsych.NO_KEYS
       }
@@ -267,7 +287,16 @@
         type: 'html-keyboard-response',
         stimulus: `<p>Time out!</p>
           <p>Press the ${CONFIG.LEFT_KEY.toUpperCase()} or ${CONFIG.RIGHT_KEY.toUpperCase()} key to continue.</p>`,
-        choices: [CONFIG.LEFT_KEY, CONFIG.RIGHT_KEY]
+        choices: [CONFIG.LEFT_KEY, CONFIG.RIGHT_KEY],
+        prompt: `
+        <div style="position: absolute; top: 2vh; left: 2vw;">
+          <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+        </div>
+        <div style="position: absolute; top: 2vh; right: 2vw;">
+          <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+          <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+        </div>`
       }],
       conditional_function: function(){
         return jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].response == null;
@@ -314,15 +343,27 @@
           }
         },
         prompt: function(){
-          var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0]
+          var last_trial = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0];
+          var fb = "";
           if(last_trial.key_press == null){
-            return `<p class="feedback">Please respond faster.</p>`;
-          }
-          if(last_trial.correct){
-            return `<p class="feedback">Correct</p>`
+            fb = `<p class="feedback">Please respond faster.</p>`;
           } else {
-            return `<p class="feedback">Incorrect</p>`
+            if(last_trial.correct){
+              fb = `<p class="feedback">Correct</p>`
+            } else {
+              fb = `<p class="feedback">Incorrect</p>`
+            }
           }
+          fb += `
+          <div style="position: absolute; top: 2vh; left: 2vw;">
+            <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+          </div>
+          <div style="position: absolute; top: 2vh; right: 2vw;">
+            <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+          </div>`
+          return fb;
         },
         trial_duration: CONFIG.FEEDBACK_DURATION,
         choices: jsPsych.NO_KEYS,
@@ -344,6 +385,15 @@
             return `<p class="feedback">Incorrect</p>`
           }
         },
+        prompt: `
+          <div style="position: absolute; top: 2vh; left: 2vw;">
+            <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+          </div>
+          <div style="position: absolute; top: 2vh; right: 2vw;">
+            <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+          </div>`,
         trial_duration: CONFIG.FEEDBACK_DURATION,
         choices: jsPsych.NO_KEYS,
         data: {
@@ -354,7 +404,15 @@
 
     var blank_screen = {
       type: 'html-keyboard-response',
-      stimulus: '',
+      stimulus: `
+      <div style="position: absolute; top: 2vh; left: 2vw;">
+        <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+        <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+      </div>
+      <div style="position: absolute; top: 2vh; right: 2vw;">
+        <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+        <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+      </div>`,
       trial_duration: CONFIG.FEEDBACK_DURATION,
       choices: jsPsych.NO_KEYS
     }
