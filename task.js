@@ -28,6 +28,11 @@
       ],
       data: {
         task: 'id'
+      },
+      on_finish: function(data){
+        jsPsych.data.addProperties({
+          subject_id: JSON.parse(data.responses).Q0
+        });
       }
     }
 
