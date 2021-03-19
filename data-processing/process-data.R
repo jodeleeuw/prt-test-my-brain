@@ -2,19 +2,23 @@ library(readr)
 library(dplyr)
 library(stringr)
 library(lubridate)
+library(jsonlite)
 
 ### PARAMETERS TO SET
 
 input.folder <- 'data-input' # will process all files in this folder
 output.folder <- 'data-output' # ... and create a copy in this folder with prefix out-
-long.shape <- 'squares' 
-short.shape <- 'circles'
+long.shape <- 'cats' 
+short.shape <- 'dogs'
 
 ### REST RUNS AUTOMATICALLY
 
 process.file <- function(file){
   
   data <- read_csv(paste(input.folder,file,sep="/"))
+  
+  subject <- (data %>% filter(task == "id") %>% pull(responses))[1] %>%
+    fromJSON() %>% .$Q0
   
   long.key <- (data %>% 
     filter(phase=='test', correct_shape == long.shape, correct == "true") %>%
@@ -47,7 +51,8 @@ process.file <- function(file){
   sf <- stamp("6/7/2019 5:16:52 PM", orders = "mdY IMS p", quiet = T)
   date.time.string <- sf(data.time)
   
-  subject <- str_extract(file, pattern="[0-9]{1,4}.csv") %>% str_sub(start=1,end=-5)
+  # this is the old way of extracting subject ID from the file name
+  # subject <- str_extract(file, pattern="[0-9]{1,4}.csv") %>% str_sub(start=1,end=-5)
   subject.string <- paste0("Subject: ", subject)
   
   short.key.string <- paste0("Short Key: ", short.key)
@@ -73,8 +78,8 @@ process.file <- function(file){
     "-",
     "-",
     "-",
-    "-"), path=outputFile)
-  write_delim(test.data, path=outputFile, append=TRUE)
+    "-"), file=outputFile)
+  write_delim(test.data, file = outputFile, append=TRUE)
 }
 
 all.files <- dir(input.folder)
