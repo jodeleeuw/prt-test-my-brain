@@ -39,13 +39,15 @@ var id_entry = {
 
 var instructions_intro_1 = {
   type: 'html-keyboard-response',
-  stimulus: `<p>Before you begin, please do the following: </p> <ol style="text-align: left;"> <li> Place your computer on a flat surface. </li> 
-	  <li> Seat yourself so that your face is approximately 1.5 feet (50 cm) from the screen.  </li>
-	  <li>Ensure that your computer sound is switched on. </li> </ol>
+  stimulus: `<p>Before you begin, please do the following:</p> 
+    <ol style="text-align: left;"> 
+      <li>Place your computer on a flat surface.</li> 
+	    <li>Seat yourself so that your face is approximately 1.5 feet (50 cm) from the screen.</li>
+	    <li>Ensure that your computer sound is switched on.</li> 
+    </ol>
 	  <p>Press the spacebar to continue.</p>`,
   choices: [32]
 }
-
 
 var instructions_intro_1a = {
   type: 'html-keyboard-response',
@@ -57,9 +59,9 @@ var instructions_intro_1a = {
 
 var instructions_intro_2 = {
   type: 'html-keyboard-response',
-  stimulus: `<p>You will be presented with either an image with more dogs than cats, or an image with 
-        more cats than dogs. You will see them one at a time.</p>
-        <p>Your task will be to decide whether more dogs or more cats were presented by pushing the correct button as quickly
+  stimulus: `<p>You will be presented with either an image with more ${CONFIG.LEFT_SHAPE} than ${CONFIG.RIGHT_SHAPE}, or an image with 
+        more ${CONFIG.RIGHT_SHAPE} than ${CONFIG.LEFT_SHAPE}. You will see them one at a time.</p>
+        <p>Your task will be to decide whether more ${CONFIG.LEFT_SHAPE} or more ${CONFIG.RIGHT_SHAPE} were presented by pushing the correct button as quickly
         and accurately as possible.</p>
         <p>The "${CONFIG.LEFT_KEY.toUpperCase()}" key will be used to identify more ${CONFIG.LEFT_SHAPE} and the "${CONFIG.RIGHT_KEY.toUpperCase()}" key will be used 
         to identify more ${CONFIG.RIGHT_SHAPE}. Examples of what the images look like are below:</p>
@@ -97,7 +99,7 @@ var instructions_intro_3 = {
   type: 'html-keyboard-response',
   stimulus: `<p>Now, let's take a practice run. You will see a fixation cross, '+', on the screen. You should always focus your
         attention on the fixation cross as this will help you identify the image as quickly and accurately as possible. The fixation
-        cross will be followed by an image with more dogs or more cats. Remember, if you think there are more ${CONFIG.LEFT_SHAPE}
+        cross will be followed by an image with more ${CONFIG.LEFT_SHAPE} or more ${CONFIG.RIGHT_SHAPE}. Remember, if you think there are more ${CONFIG.LEFT_SHAPE}
         press the "${CONFIG.LEFT_KEY.toUpperCase()}" key. If you think there are more ${CONFIG.RIGHT_SHAPE} press the "${CONFIG.RIGHT_KEY.toUpperCase()}" key.</p>
         <p>If you understand these directions and are ready to proceed to the practice round, please press the spacebar.</p>`,
   choices: [32]
@@ -251,11 +253,11 @@ var target_display = {
     task: 'respond'
   },
   on_finish: function (data) {
-    if (data.image.includes('7C_10S')) {
-      data.correct_shape = "dogs"
+    if (data.image.includes(CONFIG.LEFT_PREFIX)) {
+      data.correct_shape = CONFIG.LEFT_SHAPE
     }
-    if (data.image.includes('7S_10C')) {
-      data.correct_shape = "cats"
+    if (data.image.includes(CONFIG.RIGHT_PREFIX)) {
+      data.correct_shape = CONFIG.RIGHT_SHAPE
     }
     if (data.key_press == null) {
       data.response = null;
@@ -270,10 +272,13 @@ var target_display = {
       data.correct = data.correct_shape == CONFIG.RIGHT_SHAPE;
     }
     // below is to calculate whether a reward should be displayed on this trial
+    // if a reward is scheduled...
     if (jsPsych.timelineVariable('rewarded', true) == 1) {
+      // ... and they got it right
       if (data.correct) {
         data.did_reward = true;
       } else {
+        // otherwise, add unrewarded
         if (data.correct_shape == CONFIG.LEFT_SHAPE) {
           unrewarded_left_trials++;
         }
@@ -282,18 +287,27 @@ var target_display = {
         }
         data.did_reward = false;
       }
+    // if a reward is not scheduled...
     } else {
-      if (jsPsych.data.get().filter({ task: 'respond' }).last(1).values()[0].correct) {
+      // ... and they got it right
+      if (data.correct) {
+        // assume no reward first ...
+        data.did_reward = false
+        // but if there is an unrewarded trial...
         if (data.correct_shape == CONFIG.LEFT_SHAPE && unrewarded_left_trials > 0) {
           unrewarded_left_trials--;
+          // do the reward...
           data.did_reward = true;
         }
         if (data.correct_shape == CONFIG.RIGHT_SHAPE && unrewarded_right_trials > 0) {
           unrewarded_right_trials--;
+          // do the reward...
           data.did_reward = true;
         }
+      // ... and they got it wrong, no makeup reward
+      } else {
+        data.did_reward = false;
       }
-      data.did_reward = false;
     }
   }
 }
@@ -316,31 +330,6 @@ var timeout_display = {
   }],
   conditional_function: function () {
     return jsPsych.data.get().filter({ task: 'respond' }).last(1).values()[0].response == null;
-  }
-}
-
-var response_display = {
-  timeline: [{
-    type: 'html-keyboard-response',
-    stimulus: function () {
-      var data = jsPsych.data.get().last(1).values()[0];
-      if (data.response == "cats") {
-        return `<img src="img/yellow_circle.jpeg"></img>`
-      }
-      if (data.response == "dogs") {
-        return `<img src="img/yellow_square.jpeg"></img>`
-      }
-    },
-    choices: jsPsych.NO_KEYS,
-    trial_duration: function () {
-      // var last_trial_duration = jsPsych.data.get().last(1).values()[0].rt;
-      // var gap = CONFIG.ISI - last_trial_duration;
-      // return gap;
-      return CONFIG.RESPONSE_DISPLAY_DURATION;
-    }
-  }],
-  conditional_function: function () {
-    return jsPsych.data.get().last(1).values()[0].key_press !== null;
   }
 }
 
@@ -442,8 +431,6 @@ var feedback = {
     return jsPsych.data.get().filter({ task: 'respond' }).last(1).values()[0].did_reward;
   }
 }
-
-
 
 var blank_in_place_of_feedback = {
   timeline: [blank_screen],
