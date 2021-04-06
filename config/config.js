@@ -38,6 +38,8 @@ var CONFIG = {
   RIGHT_EXAMPLE: 'img/7C_10S_yellow3.jpg', // for instructions page, example shown on the right side for right key
   LEFT_SINGLE_EXAMPLE: 'img/yellow_circle.jpeg', // for instructions, a single example of the shape
   RIGHT_SINGLE_EXAMPLE: 'img/yellow_square.jpeg', // for instructions, a single example of the shape
+  LEFT_PREFIX: '7S_10C', // the part of the image filename that identifies that there are more LEFT_SHAPE than RIGHT_SHAPE
+  RIGHT_PREFIX: '7C_10S', // the part of the image filename that identifies that there are more RIGHT_SHAPE than LEFT_SHAPE
   IMAGE_SIZE: 500, // pixels
   ESTIMATED_TOTAL_DURATION: 10, // minutes
   TOTAL_BLOCKS: 3, // make sure this matches the numbers assigned in the stimulus info below
