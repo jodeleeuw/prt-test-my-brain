@@ -482,7 +482,12 @@ for (var b = 1; b <= CONFIG.TOTAL_BLOCKS; b++) {
       stimulus: `<p>You have completed ${b} of ${CONFIG.TOTAL_BLOCKS} blocks of trials.</p>
             <p>The next block will begin in ${CONFIG.BREAK_LENGTH / 1000} seconds.</p>`,
       trial_duration: CONFIG.BREAK_LENGTH,
-      choices: jsPsych.NO_KEYS
+      choices: jsPsych.NO_KEYS,
+      on_finish: function(){
+        // reset the unrewarded trials count, as these are on a per-block basis
+        unrewarded_left_trials = 0;
+        unrewarded_right_trials = 0;
+      }
     }
     test_procedure.timeline.push(rest);
   }
