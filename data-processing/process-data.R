@@ -21,15 +21,15 @@ process.file <- function(file){
     fromJSON() %>% .$Q0
   
   long.key <- (data %>% 
-    filter(phase=='test', correct_shape == long.shape, correct == "true") %>%
+    filter(phase=='test', correct_shape == long.shape, correct == TRUE) %>%
     pull(key_press))[1] %>% as.numeric() %>% intToUtf8() %>% tolower()
   short.key <- (data %>% 
-    filter(phase=='test', correct_shape == short.shape, correct == "true") %>%
+    filter(phase=='test', correct_shape == short.shape, correct == TRUE) %>%
     pull(key_press))[1] %>% as.numeric() %>% intToUtf8() %>% tolower()
   
-  bias.shape <- data[1,'bias_shape']
-  left.shape <- data[1,'left_shape']
-  right.shape <- data[1,'right_shape']
+  bias.shape <- data[[1,'bias_shape']]
+  left.shape <- data[[1,'left_shape']]
+  right.shape <- data[[1,'right_shape']]
   
   test.data <- data %>% 
     filter(phase == 'test', task == 'respond') %>%
@@ -78,8 +78,8 @@ process.file <- function(file){
     "-",
     "-",
     "-",
-    "-"), file=outputFile)
-  write_delim(test.data, file = outputFile, append=TRUE)
+    "-"), path=outputFile)
+  write_delim(test.data, path = outputFile, append=TRUE)
 }
 
 all.files <- dir(input.folder)
