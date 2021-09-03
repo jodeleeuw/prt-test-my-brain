@@ -241,7 +241,7 @@ var target_display = {
         </div>`,
   stimulus_duration: CONFIG.STIMULUS_DURATION,
   trial_duration_min: CONFIG.STIMULUS_DURATION,
-  trial_duration: CONFIG.TRIAL_DURATION,
+  trial_duration: jsPsych.timelineVariable('duration'),
   choices: [CONFIG.LEFT_KEY, CONFIG.RIGHT_KEY],
   data: {
     block: jsPsych.timelineVariable('block'),
@@ -309,6 +309,41 @@ var target_display = {
         data.did_reward = false;
       }
     }
+  }
+}
+
+var response_display = {
+  timeline: [{
+    type: 'html-keyboard-response',
+    stimulus: function () {
+      var response_key = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].key_press);
+      if(response_key == CONFIG.LEFT_KEY){
+        var image = CONFIG.LEFT_SINGLE_EXAMPLE;
+      }
+      if(response_key == CONFIG.RIGHT_KEY){
+        var image = CONFIG.RIGHT_SINGLE_EXAMPLE;
+      }
+      return `<img src="${image}" style="width:${CONFIG.RESPONSE_IMAGE_SIZE}px;"></img>`
+    },
+    prompt: `
+          <div style="position: absolute; top: 2vh; left: 2vw;">
+            <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
+          </div>
+          <div style="position: absolute; top: 2vh; right: 2vw;">
+            <img src="${CONFIG.RIGHT_SINGLE_EXAMPLE}" style="width:100px;"></img>
+            <p>${CONFIG.RIGHT_KEY.toUpperCase()} = ${CONFIG.RIGHT_SHAPE}</p>
+          </div>`,
+    trial_duration: function() {
+      var last_rt = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].rt;
+      console.log(last_rt);
+      var duration = jsPsych.timelineVariable('duration', true) - last_rt;
+      return duration;
+    },
+    choices: jsPsych.NO_KEYS
+  }],
+  conditional_function: function(){
+    return jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].response !== null;
   }
 }
 
@@ -444,7 +479,7 @@ var blank_in_place_of_feedback = {
 /* practice version */
 
 var practice_trials = {
-  timeline: [fixation, target_display, practice_feedback, blank_in_place_of_feedback],
+  timeline: [fixation, target_display, response_display, practice_feedback, blank_in_place_of_feedback],
   timeline_variables: CONFIG.PRACTICE_TRIALS,
   data: {
     phase: 'practice'
@@ -469,7 +504,7 @@ var test_procedure = {
 }
 for (var b = 1; b <= CONFIG.TOTAL_BLOCKS; b++) {
   var test_block = {
-    timeline: [fixation, target_display, timeout_display, feedback, blank_in_place_of_feedback],
+    timeline: [fixation, target_display, response_display, timeout_display, feedback, blank_in_place_of_feedback],
     timeline_variables: CONFIG.TRIAL_INFO.filter(function (x) { return x.block == b }),
     data: {
       block: b
