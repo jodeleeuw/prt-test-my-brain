@@ -214,7 +214,7 @@ var fixation = {
   type: 'html-keyboard-response',
   stimulus: `<p class="fixation">+</p>`,
   choices: jsPsych.NO_KEYS,
-  trial_duration: CONFIG.FIXATION_DURATION,
+  trial_duration: jsPsych.timelineVariable('fixation'),
   prompt: `<div style="position: absolute; top: 2vh; left: 2vw;">
           <img src="${CONFIG.LEFT_SINGLE_EXAMPLE}" style="width:100px;"></img>
           <p>${CONFIG.LEFT_KEY.toUpperCase()} = ${CONFIG.LEFT_SHAPE}</p>
@@ -241,7 +241,7 @@ var target_display = {
         </div>`,
   stimulus_duration: CONFIG.STIMULUS_DURATION,
   trial_duration_min: CONFIG.STIMULUS_DURATION,
-  trial_duration: jsPsych.timelineVariable('duration'),
+  trial_duration: CONFIG.RESPONSE_WINDOW_DURATION,
   choices: [CONFIG.LEFT_KEY, CONFIG.RIGHT_KEY],
   data: {
     block: jsPsych.timelineVariable('block'),
@@ -336,8 +336,7 @@ var response_display = {
           </div>`,
     trial_duration: function() {
       var last_rt = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].rt;
-      console.log(last_rt);
-      var duration = jsPsych.timelineVariable('duration', true) - last_rt;
+      var duration = jsPsych.timelineVariable('duration', true) + CONFIG.RESPONSE_WINDOW_DURATION - last_rt;
       return duration;
     },
     choices: jsPsych.NO_KEYS
@@ -585,10 +584,10 @@ var final_screen = {
 /* initialization */
 var timeline = [];
 
-timeline.push(id_entry);
-timeline.push(instructions_intro);
-timeline.push(practice_procedure);
-timeline.push(instructions_feedback);
+// timeline.push(id_entry);
+// timeline.push(instructions_intro);
+// timeline.push(practice_procedure);
+// timeline.push(instructions_feedback);
 timeline.push(test_procedure);
 timeline.push(save_data);
 timeline.push(final_screen);
