@@ -584,10 +584,10 @@ var final_screen = {
 /* initialization */
 var timeline = [];
 
-// timeline.push(id_entry);
-// timeline.push(instructions_intro);
-// timeline.push(practice_procedure);
-// timeline.push(instructions_feedback);
+timeline.push(id_entry);
+timeline.push(instructions_intro);
+timeline.push(practice_procedure);
+timeline.push(instructions_feedback);
 timeline.push(test_procedure);
 timeline.push(save_data);
 timeline.push(final_screen);
