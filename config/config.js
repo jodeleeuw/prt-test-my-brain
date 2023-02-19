@@ -25,7 +25,7 @@ displayed. The rewarded variable controls whether the stimulus will be rewarded 
 // SECTION 1 //
 var CONFIG = {
   FIXATION_DURATION: 500, // ms (how long to show the fixation cross)
-  STIMULUS_DURATION: 350, // ms (how long to show the stimulus for classification)
+  STIMULUS_DURATION: 250, // ms (how long to show the stimulus for classification)
   RESPONSE_WINDOW_DURATION: 1500, // ms (how long to wait for a response after the stimulus is shown)
   //TRIAL_DURATION: 5000, // ms, (maximum duration to wait for a response before continuing; or set to null to wait for a response indefinitely)
   FEEDBACK_DURATION: 1500, // ms (how long to show the feedback when it appears)
