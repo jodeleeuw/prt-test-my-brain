@@ -336,7 +336,7 @@ var response_display = {
           </div>`,
     trial_duration: function() {
       var last_rt = jsPsych.data.get().filter({task: 'respond'}).last(1).values()[0].rt;
-      var duration = jsPsych.timelineVariable('duration', true) + CONFIG.RESPONSE_WINDOW_DURATION - Math.max(CONFIG.STIMULUS_DURATION, last_rt - CONFIG.STIMULUS_DURATION);
+      var duration = jsPsych.timelineVariable('duration', true) + CONFIG.RESPONSE_WINDOW_DURATION - Math.max(0, last_rt - CONFIG.STIMULUS_DURATION);
       return duration;
     },
     choices: jsPsych.NO_KEYS
@@ -584,10 +584,10 @@ var final_screen = {
 /* initialization */
 var timeline = [];
 
-timeline.push(id_entry);
-timeline.push(instructions_intro);
-timeline.push(practice_procedure);
-timeline.push(instructions_feedback);
+//timeline.push(id_entry);
+//timeline.push(instructions_intro);
+//timeline.push(practice_procedure);
+//timeline.push(instructions_feedback);
 timeline.push(test_procedure);
 timeline.push(save_data);
 timeline.push(final_screen);
